@@ -1,0 +1,17 @@
+﻿## Title: Homestead Engineer 0.2
+## Description: Place items in your home with precision
+## APIVersion: 100021
+## Author: WetWired
+## SavedVariables: HomesteadEngVars
+## 
+## This Add-On is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates. The Elder Scrolls® and related logos are registered trademarks or trademarks of ZeniMax Media Inc. in the United States and/or other countries. All rights reserved.
+
+matrix.lua
+transform.lua
+HomesteadEngineer.lua
+taborder.lua
+coordwnd.lua
+selitem.lua
+itemadj.lua
+HomesteadEngineer.xml
+bindings.xml

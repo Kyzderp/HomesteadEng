@@ -1,0 +1,9 @@
+<Bindings>
+  <Layer name="SI_KEYBINDINGS_LAYER_HOUSING_EDITOR" allowFallthrough="false">
+    <Category name="Homestead Engineer">
+      <Action name="HOMESTEAD_ENG_SELECT_PRIMARY">
+        <Down>HomesteadEng.SelectPrimary()</Down>
+      </Action>
+    </Category>
+  </Layer>
+</Bindings>
