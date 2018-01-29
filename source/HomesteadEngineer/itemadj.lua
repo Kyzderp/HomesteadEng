@@ -190,7 +190,9 @@ local function HomesteadEngItemAdj_SetItem(self,furnID)
     return;
   end
   self.furnID=furnID;
-  self:SetHidden(false);
+  if furnID then
+    self:SetHidden(false);
+  end
   self.wnd.SelWnd:SetItem(furnID);
   HomesteadEngItemAdj_CoordItemAndMode(self);
 end
@@ -205,8 +207,14 @@ local function HomesteadEngItemAdj_SetLock(self,lock)
   self.lock=lock;
   if lock then
     self.wnd.CWnd:SetCallback(nil);
-  elseif menu[self.sel].callback then
+  elseif menu[self.sel].callback and (self.furnID or menu[self.sel].itemless) then
     self.wnd.CWnd:SetCallback(function (x,y,z,p,w,r) menu[self.sel].callback(self,x,y,z,p,w,r);end);
+  end
+end
+
+local function HomesteadEngItemAdj_OnFurnRemoved(self,furnID)
+  if furnID==self.furnID then
+    self:SetItem(nil);
   end
 end
 
@@ -217,6 +225,7 @@ function HomesteadEngItemAdj_Initialize(self)
   self.SetItem=HomesteadEngItemAdj_SetItem;
   self.LocalChanged=HomesteadEngItemAdj_LocalChanged;
   self.SetLock=HomesteadEngItemAdj_SetLock;
+  self.OnFurnRemoved=HomesteadEngItemAdj_OnFurnRemoved;
 
   self.wnd={};
   self.wnd.CWnd=self:GetNamedChild("C");

@@ -118,9 +118,17 @@ function HE.ModeChanged(event,oldMode,newMode)
   end
 end
 
+function HE.FurnRemoved(event,furnId)
+  if HE.primaryTarget==furnId then
+    HE.primaryTarget=nil;
+  end
+  HE.Wnd.ItemAdj:OnFurnRemoved(furnId);
+end
+
 EVENT_MANAGER:RegisterForEvent(HE.name,EVENT_ADD_ON_LOADED,HE.OnAddOnLoaded);
 EVENT_MANAGER:RegisterForEvent(HE.name,EVENT_PLAYER_ACTIVATED,HE.OnZone);
-EVENT_MANAGER:RegisterForEvent(HE.name,EVENT_HOUSING_EDITOR_MODE_CHANGED,HE.ModeChanged)
+EVENT_MANAGER:RegisterForEvent(HE.name,EVENT_HOUSING_EDITOR_MODE_CHANGED,HE.ModeChanged);
+EVENT_MANAGER:RegisterForEvent(HE.name,EVENT_HOUSING_FURNITURE_REMOVED,HE.FurnRemoved);
 
 --###############--
 
