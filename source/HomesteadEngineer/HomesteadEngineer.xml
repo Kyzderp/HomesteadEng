@@ -109,7 +109,7 @@
 
     <TopLevelControl name="HomesteadEngItemAdj" mouseEnabled="true" movable="true" clampedToScreen="true" hidden="true">
       <Dimensions x="350" y="340" />
-      <Anchor point="RIGHT" offsetX="-5"/>
+      <Anchor point="TOPRIGHT" offsetX="-5" offsetY="5"/>
 
       <OnInitialized>
         HomesteadEngItemAdj_Initialize(self);
