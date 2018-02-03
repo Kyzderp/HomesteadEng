@@ -42,6 +42,7 @@ function HE.SetLocalTransform(x,y,z,p,w,r)
     HE.locTrC={x,y,z,p,w,r};
     HE.locTr=TR.CoordToTransform(HE.L2C(HE.locTrC));
     HE.Wnd.ItemAdj:LocalChanged();
+    HomesteadEngMover.OnLocalChanged();
   end
 end
 

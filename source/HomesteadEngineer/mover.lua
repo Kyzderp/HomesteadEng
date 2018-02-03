@@ -33,14 +33,33 @@ local TR=HomesteadEngTransform;
 
 local HISTORY_VALID=1.0;
 
-local function CheckHistory(myCache,frameIdx,x,y,z)
+--Especially since the game stores angles internally with lower precsision, a 
+-- simple equality check will not work. In the case of angles, we know that 
+-- the values should always be in the range -pi<=angle<=pi, so we can use a 
+-- fixed accuracy cutoff to do the comparison. This assumption is not valid 
+-- for most floating point numbers. The limit used is based on observed 
+-- retention of precision in game.
+local ANGLE_ACCURACY=1/(2^11);
+local function EqAng(a,b)
+  return math.abs(a-b)<ANGLE_ACCURACY;
+end
+
+local function ComparePos(x1,y1,z1,x2,y2,z2)
+  return x1==x2 and y1==y2 and z1==z2;
+end
+
+local function CompareAng(p1,w1,r1,p2,w2,r2)
+  return EqAng(p1,p2) and EqAng(w1,w2) and EqAng(r1,r2);
+end
+
+local function CheckHistory(myCache,frameIdx,a,b,c,CompareFunc)
   local curLoc;
   if myCache.history then
     --Process the history to determine our progress and ultimately determine if we should use the cached value
     for i=1,#myCache.history-1 do
       --History entries older than HISTORY_VALID should be discarded
       if (frameIdx-myCache.history[i][1])<=HISTORY_VALID then
-        if myCache.history[i][2]==x and myCache.history[i][3]==y and myCache.history[i][4]==z then
+        if CompareFunc(myCache.history[i][2],myCache.history[i][3],myCache.history[i][4],a,b,c) then
           --We found the first history item matching the reported position.
           curLoc=i;
           break;
@@ -65,12 +84,12 @@ function Mover.GetItemPos(furnId)
   if Mover.itemCache[furnKey] then
     local myCache=Mover.itemCache[furnKey];
     local frameIdx=GetFrameTimeSeconds();
-    if CheckHistory(myCache,frameIdx,x,y,z) or (myCache.last[2]==x and myCache.last[3]==y and myCache.last[4]==z) then
+    if CheckHistory(myCache,frameIdx,x,y,z,ComparePos) or (myCache.last[2]==x and myCache.last[3]==y and myCache.last[4]==z) then
       x=myCache.use.x;
       y=myCache.use.y;
       z=myCache.use.z;
     else
-      d("no match "..string.format("%.3f",myCache.last[1])..","..tostring(myCache.last[2])..","..tostring(myCache.last[3])..","..tostring(myCache.last[4]).." "..string.format("%.3f",frameIdx)..","..tostring(x)..","..tostring(y)..","..tostring(z));
+      --d("no match "..string.format("%.3f",myCache.last[1])..","..tostring(myCache.last[2])..","..tostring(myCache.last[3])..","..tostring(myCache.last[4]).." "..string.format("%.3f",frameIdx)..","..tostring(x)..","..tostring(y)..","..tostring(z));
       Mover.itemCache[furnKey]=nil;
     end
   end
@@ -105,7 +124,7 @@ function Mover.SetItemPos(furnId,x,y,z,p,w,r)
   local reqpos={frameIdx,math.floor(x+.5),math.floor(y+.5),math.floor(z+.5)};
   local curpos={frameIdx,HousingEditorGetFurnitureWorldPosition(furnId)};
   --If we're not currently tracking a history of movements, or our history is used up, start the history with the current position
-  CheckHistory(myCache,curpos[1],curpos[2],curpos[3],curpos[4]);
+  CheckHistory(myCache,curpos[1],curpos[2],curpos[3],curpos[4],ComparePos);
   if not myCache.history then
     myCache.history={};
     table.insert(myCache.history,curpos);
@@ -125,14 +144,53 @@ function Mover.SetItemPos(furnId,x,y,z,p,w,r)
 end
 
 function Mover.GetItemPosLoc(furnId)
-  return TR.TransformToCoord(TR.FwdTransform(TR.CoordToTransform(Mover.GetItemPos(furnId)),HE.locTr));
+  local x,y,z,p,w,r=Mover.GetItemPos(furnId);
+  local xl,yl,zl,pl,wl,rl=TR.TransformToCoord(TR.FwdTransform(TR.CoordToTransform(x,y,z,p,w,r),HE.locTr));
+  local furnKey=zo_getSafeId64Key(furnId);
+  if Mover.locRotCache[furnKey] then
+    local myCache=Mover.locRotCache[furnKey];
+    local frameIdx=GetFrameTimeSeconds();
+    if CheckHistory(myCache,frameIdx,p,w,r,CompareAng) or CompareAng(myCache.last[2],myCache.last[3],myCache.last[4],p,w,r) then
+      pl=myCache.use.p;
+      wl=myCache.use.w;
+      rl=myCache.use.r;
+    else
+      --d("no match "..string.format("%.3f",myCache.last[1])..","..tostring(myCache.last[2])..","..tostring(myCache.last[3])..","..tostring(myCache.last[4]).." "..string.format("%.3f",frameIdx)..","..tostring(p)..","..tostring(w)..","..tostring(r));
+      Mover.itemCache[furnKey]=nil;
+    end
+  end
+  return xl,yl,zl,pl,wl,rl;
 end
 
-function Mover.SetItemPosLoc(furnId,x,y,z,p,w,r)
+function Mover.SetItemPosLoc(furnId,xl,yl,zl,pl,wl,rl)
   if Mover.locked then
     return;
   end
-  Mover.SetItemPos(furnId,TR.TransformToCoord(TR.RevTransform(TR.CoordToTransform(x,y,z,p,w,r),HE.locTr)));
+  --Constrain rotations to +/- 180 degrees
+  pl=(pl+math.pi)%(2*math.pi)-math.pi;
+  wl=(wl+math.pi)%(2*math.pi)-math.pi;
+  rl=(rl+math.pi)%(2*math.pi)-math.pi;
+  --Do the transformation
+  local x,y,z,p,w,r=TR.TransformToCoord(TR.RevTransform(TR.CoordToTransform(xl,yl,zl,pl,wl,rl),HE.locTr));
+  --Cache the (constrained) original angle and result
+  local furnKey=zo_getSafeId64Key(furnId);
+  local frameIdx=GetFrameTimeSeconds();
+  Mover.locRotCache[furnKey]=Mover.locRotCache[furnKey] or {};
+  local myCache=Mover.locRotCache[furnKey];
+  local reqrot={frameIdx,p,w,r};
+  local currot={frameIdx,HousingEditorGetFurnitureOrientation(furnId)};
+  --If we're not currently tracking a history of rotations, or our history is used up, start the history with the current rotation
+  CheckHistory(myCache,currot[1],currot[2],currot[3],currot[4],CompareAng);
+  if not myCache.history then
+    myCache.history={};
+    table.insert(myCache.history,currot);
+  end
+  --Add the requested position to the history of rotations
+  table.insert(myCache.history,reqrot);
+  --Then store the last requested position and the high resolution coordinates to use
+  myCache.last=reqrot;
+  myCache.use={p=pl,w=wl,r=rl};
+  Mover.SetItemPos(furnId,x,y,z,p,w,r);
 end
 
 function Mover.MoveItemRel(furnId,x,y,z)
@@ -145,18 +203,25 @@ end
 
 function Mover.Init()
   Mover.itemCache={};
+  Mover.locRotCache={};
   Mover.locked=false;
 end
 
 function Mover.OnZone()
   Mover.itemCache={};
+  Mover.locRotCache={};
 end
 
 function Mover.SetLock(locked)
   Mover.locked=locked;
 end
 
+function Mover.OnLocalChanged()
+  Mover.locRotCache={};
+end
+
 function Mover.OnFurnRemoved(furnId)
   local furnKey=zo_getSafeId64Key(furnId);
   Mover.itemCache[furnKey]=nil;
+  Mover.locRotCache[furnKey]=nil;
 end
