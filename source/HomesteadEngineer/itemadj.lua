@@ -1,14 +1,15 @@
 local HE=HomesteadEng;
+local Mover=HomesteadEngMover;
 local TR=HomesteadEngTransform;
 
 local function SetupSetAbs(self)
-  local x,y,z,p,w,r=HE.GetItemPos(self.furnID);
+  local x,y,z,p,w,r=Mover.GetItemPos(self.furnID);
   self.lastLoc={x,y,z,p,w,r};
   self.wnd.CWnd:SetCoords(x,y,z,p,w,r);
 end
 
 local function UpdateSetAbs(self)
-  local x,y,z,p,w,r=HE.GetItemPos(self.furnID);
+  local x,y,z,p,w,r=Mover.GetItemPos(self.furnID);
   local l=self.lastLoc;
   if x~=l[1] or y~=l[2] or z~=l[3] or p~=l[4] or w~=l[5] or r~=l[6] then
     self.lastLoc={x,y,z,p,w,r};
@@ -17,57 +18,57 @@ local function UpdateSetAbs(self)
 end
 
 local function SetAbs(self,x,y,z,p,w,r)
-  HE.SetItemPos(self.furnID,x,y,z,p,w,r);
+  Mover.SetItemPos(self.furnID,x,y,z,p,w,r);
   self.wnd.CWnd:SetCoords(x,y,z,p,w,r);
   self.wnd.CWnd:WriteEdit();
 end
 
 local function SetupSetLoc(self)
-  self.lastLoc={HE.GetItemPos(self.furnID)};
-  self.wnd.CWnd:SetCoords(HE.GetItemPosLoc(self.furnID));
+  self.lastLoc={Mover.GetItemPos(self.furnID)};
+  self.wnd.CWnd:SetCoords(Mover.GetItemPosLoc(self.furnID));
 end
 
 local function UpdateSetLoc(self)
-  local x,y,z,p,w,r=HE.GetItemPos(self.furnID);
+  local x,y,z,p,w,r=Mover.GetItemPos(self.furnID);
   local l=self.lastLoc;
   if x~=l[1] or y~=l[2] or z~=l[3] or p~=l[4] or w~=l[5] or r~=l[6] then
     self.lastLoc={x,y,z,p,w,r};
-    self.wnd.CWnd:SetCoords(HE.GetItemPosLoc(self.furnID));
+    self.wnd.CWnd:SetCoords(Mover.GetItemPosLoc(self.furnID));
   end
 end
 
 local function SetLoc(self,x,y,z,p,w,r)
-  HE.SetItemPosLoc(self.furnID,x,y,z,p,w,r);
+  Mover.SetItemPosLoc(self.furnID,x,y,z,p,w,r);
   self.wnd.CWnd:SetCoords(x,y,z,p,w,r);
   self.wnd.CWnd:WriteEdit();
 end
 
 local function MoveAbs(self,x,y,z,p,w,r)
-  local x1,y1,z1,p1,w1,r1=HE.GetItemPos(self.furnID);
-  HE.SetItemPos(self.furnID,x1+x,y1+y,z1+z,p1,w1,r1);
+  local x1,y1,z1,p1,w1,r1=Mover.GetItemPos(self.furnID);
+  Mover.SetItemPos(self.furnID,x1+x,y1+y,z1+z,p1,w1,r1);
 end
 
 local function MoveLoc(self,x,y,z,p,w,r)
-  local x1,y1,z1,p1,w1,r1=HE.GetItemPosLoc(self.furnID);
-  HE.SetItemPosLoc(self.furnID,x1+x,y1+y,z1+z,p1,w1,r1);
+  local x1,y1,z1,p1,w1,r1=Mover.GetItemPosLoc(self.furnID);
+  Mover.SetItemPosLoc(self.furnID,x1+x,y1+y,z1+z,p1,w1,r1);
 end
 
 local function MoveRel(self,x,y,z,p,w,r)
-  HE.MoveItemRel(self.furnID,x,y,z);
+  Mover.MoveItemRel(self.furnID,x,y,z);
 end
 
 local function RotAbs(self,x,y,z,p,w,r)
-  local x1,y1,z1,p1,w1,r1=HE.GetItemPos(self.furnID);
-  HE.SetItemPos(self.furnID,x1,y1,z1,p1+p,w1+w,r1+r);
+  local x1,y1,z1,p1,w1,r1=Mover.GetItemPos(self.furnID);
+  Mover.SetItemPos(self.furnID,x1,y1,z1,p1+p,w1+w,r1+r);
 end
 
 local function RotLoc(self,x,y,z,p,w,r)
-  local x1,y1,z1,p1,w1,r1=HE.GetItemPosLoc(self.furnID);
-  HE.SetItemPosLoc(self.furnID,x1,y1,z1,p1+p,w1+w,r1+r);
+  local x1,y1,z1,p1,w1,r1=Mover.GetItemPosLoc(self.furnID);
+  Mover.SetItemPosLoc(self.furnID,x1,y1,z1,p1+p,w1+w,r1+r);
 end
 
 local function RotRel(self,x,y,z,p,w,r)
-  HE.RotItemRel(self.furnID,p,w,r);
+  Mover.RotItemRel(self.furnID,p,w,r);
 end
 
 local function SetupSetOrigin(self)
@@ -80,7 +81,7 @@ end
 
 local function SetOriginFromTarget(self)
   if self.furnID then
-    HE.SetLocalTransform(HE.GetItemPos(self.furnID));
+    HE.SetLocalTransform(Mover.GetItemPos(self.furnID));
   end
 end
 

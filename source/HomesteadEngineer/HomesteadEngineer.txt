@@ -9,6 +9,7 @@
 matrix.lua
 transform.lua
 HomesteadEngineer.lua
+mover.lua
 taborder.lua
 coordwnd.lua
 selitem.lua
