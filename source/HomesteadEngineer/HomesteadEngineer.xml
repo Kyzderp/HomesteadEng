@@ -79,17 +79,21 @@
       <Dimensions x="200" y="100"/>
       <OnInitialized>HomesteadEngSelItem_Initialize(self);</OnInitialized>
       <Controls>
-        <Label name="$(parent)Link" font="ZoFontGame" color="CFDCBD">
+        <Label name="$(parent)Link" font="ZoFontGame" color="CFDCBD" linkEnabled="true" mouseEnabled="true">
           <Anchor point="TOPLEFT"/>
+          <OnLinkClicked>ZO_LinkHandler_OnLinkClicked(linkText,button)</OnLinkClicked>
         </Label>
-        <Label name="$(parent)Cat" font="ZoFontGame" color="CFDCBD">
+        <Label name="$(parent)Cat" font="ZoFontGameSmall" color="CFDCBD">
           <Anchor point="TOPLEFT" relativeTo="$(parent)Link" relativePoint="BOTTOMLEFT"/>
         </Label>
-        <Label name="$(parent)Subcat" font="ZoFontGame" color="CFDCBD">
+        <Label name="$(parent)Subcat" font="ZoFontGameSmall" color="CFDCBD">
           <Anchor point="TOPLEFT" relativeTo="$(parent)Cat" relativePoint="BOTTOMLEFT"/>
         </Label>
-        <Label name="$(parent)Theme" font="ZoFontGame" color="CFDCBD">
+        <Label name="$(parent)Theme" font="ZoFontGameSmall" color="CFDCBD">
           <Anchor point="TOPLEFT" relativeTo="$(parent)Subcat" relativePoint="BOTTOMLEFT"/>
+        </Label>
+        <Label name="$(parent)Size" font="ZoFontGameSmall" color="CFDCBD">
+          <Anchor point="TOPLEFT" relativeTo="$(parent)Theme" relativePoint="BOTTOMLEFT"/>
         </Label>
         <Texture name="$(parent)Tex" level="0">
           <Anchor point="BOTTOMRIGHT"/>
