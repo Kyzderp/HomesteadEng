@@ -1,5 +1,5 @@
 HomesteadEng={};
-HE=HomesteadEng;
+local HE=HomesteadEng;
 HE.name="HomesteadEngineer"; --If this doesn't match what's in the .txt file, stuff will break...
 HE.a={};
 
