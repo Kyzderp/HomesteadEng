@@ -53,7 +53,7 @@ local function MoveLoc(self,x,y,z,p,w,r)
 end
 
 local function MoveRel(self,x,y,z,p,w,r)
-  HE.SetItemPos(self.furnID,TR.TransformToCoord(TR.RevTransform(TR.CoordToTransform(x,y,z,0,0,0),TR.CoordToTransform(HE.GetItemPos(self.furnID)))));
+  HE.MoveItemRel(self.furnID,x,y,z);
 end
 
 local function RotAbs(self,x,y,z,p,w,r)
@@ -67,7 +67,7 @@ local function RotLoc(self,x,y,z,p,w,r)
 end
 
 local function RotRel(self,x,y,z,p,w,r)
-  HE.SetItemPos(self.furnID,TR.TransformToCoord(TR.RevTransform(TR.CoordToTransform(0,0,0,p,w,r),TR.CoordToTransform(HE.GetItemPos(self.furnID)))));
+  HE.RotItemRel(self.furnID,p,w,r);
 end
 
 local function SetupSetOrigin(self)
