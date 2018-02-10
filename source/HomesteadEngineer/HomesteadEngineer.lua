@@ -48,7 +48,7 @@ end
 
 function HE.OnAddOnLoaded(event,addonName)
   if(addonName==HE.name) then
-    ZO_CreateStringId("SI_BINDING_NAME_HOMESTEAD_ENG_SELECT_PRIMARY","Select furniture");
+    ZO_CreateStringId("SI_BINDING_NAME_HOMESTEAD_ENG_SELECT_PRIMARY","Target furniture");
     HE.Wnd={};
     HE.Wnd.ItemAdj=HomesteadEngItemAdj;
     HE.Log("OnAddOnLoaded");
