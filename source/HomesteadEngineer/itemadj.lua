@@ -187,13 +187,13 @@ local function HomesteadEngItemAdj_AddToTabOrder(self,window)
 end
 
 local function HomesteadEngItemAdj_SetItem(self,furnID)
+  if furnID then
+    self:SetHidden(false);
+  end
   if self.furnID==furnID then
     return;
   end
   self.furnID=furnID;
-  if furnID then
-    self:SetHidden(false);
-  end
   self.wnd.SelWnd:SetItem(furnID);
   HomesteadEngItemAdj_CoordItemAndMode(self);
 end
