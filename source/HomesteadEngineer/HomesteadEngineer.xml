@@ -76,7 +76,6 @@
     </Control>
 
     <Control name="HomesteadEngSelItem" virtual="true">
-      <Dimensions x="200" y="100"/>
       <OnInitialized>HomesteadEngSelItem_Initialize(self);</OnInitialized>
       <Controls>
         <Label name="$(parent)Link" font="ZoFontGame" color="CFDCBD" linkEnabled="true" mouseEnabled="true">
@@ -111,8 +110,19 @@
       <PressedOffset x="12" y="2"/>
     </Button>
 
+    <Button name="HomesteadEngMenuButtonAction" inherits="ZO_DefaultTextButton" virtual="true" horizontalAlignment="LEFT">
+      <NormalOffset x="10"/>
+      <PressedOffset x="12" y="2"/>
+      <Textures
+        normal="EsoUI/Art/Buttons/ESO_buttonLarge_normal.dds"
+        pressed="EsoUI/Art/Buttons/ESO_buttonlLarge_mouseDown.dds"
+        mouseOver="EsoUI/Art/Buttons/ESO_buttonLarge_mouseOver.dds"
+        disabled="EsoUI/Art/Buttons/ESO_buttonLarge_disabled.dds"
+      />
+    </Button>
+
     <TopLevelControl name="HomesteadEngItemAdj" mouseEnabled="true" movable="true" clampedToScreen="true" hidden="true">
-      <Dimensions x="350" y="340" />
+      <Dimensions x="350" y="350" />
       <Anchor point="TOPRIGHT" offsetX="-5" offsetY="5"/>
 
       <OnInitialized>
@@ -149,6 +159,7 @@
         </Control>
         <Control name="$(parent)Sel" inherits="HomesteadEngSelItem">
           <Anchor point="TOPLEFT" relativeTo="$(parent)C" relativePoint="BOTTOMLEFT" offsetY="5"/>
+          <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)"/>
         </Control>
         <Button name="$(parent)Close" endCapWith="0">
           <Dimensions x="21" y="21"/>

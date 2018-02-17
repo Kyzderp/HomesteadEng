@@ -101,9 +101,9 @@ local menu={
   {type="sel",  text="Absolute",    title="Rotate Absolute",showpos=false,showrot=true,callback=RotAbs,   setup=Zero},
   {type="sel",  text="Local",       title="Rotate Local",   showpos=false,showrot=true,callback=RotLoc,   setup=Zero},
   {type="sel",  text="Relative",    title="Rotate Relative",showpos=false,showrot=true,callback=RotRel,   setup=Zero},
-  {type="title",text="Local Coordinates"},
-  {type="sel",  text="Enter origin",title="Set Origin",     showpos=true, showrot=true,callback=SetOrigin,setup=SetupSetOrigin,udloc=true,itemless=true},
-  {type="act",  text="From target", action=SetOriginFromTarget}
+  {type="title",text="Config Local Coords"},
+  {type="sel",  text="Edit origin",title="Edit Local Origin",showpos=true, showrot=true,callback=SetOrigin,setup=SetupSetOrigin,udloc=true,itemless=true},
+  {type="act",  text="Set from target",action=SetOriginFromTarget}
 };
 
 local function HomesteadEngItemAdj_CoordItemAndMode(self,setmode)
@@ -147,6 +147,7 @@ end
 local function HomesteadEngItemAdj_BuildMenu(self,menuParent)
   local anchor=menuParent;
   local anchorPoint=TOPLEFT;
+  local anchorOfs=0;
   local newItem;
 
   HomesteadEng.Log("Build");
@@ -155,14 +156,22 @@ local function HomesteadEngItemAdj_BuildMenu(self,menuParent)
 
   for i=1,#menu do
     HomesteadEng.Log(menu[i].text);
-    if menu[i].type=="sel" or menu[i].type=="act" then
+    if menu[i].type=="sel" then
       newItem=WINDOW_MANAGER:CreateControlFromVirtual("item"..i,menuParent,"HomesteadEngMenuButton");
       newItem:SetHandler("OnClicked",function () OnItemPress(self,i);end);
+      newItem:SetAnchor(TOPLEFT,anchor,anchorPoint,0,anchorOfs);
+      anchorOfs=0;
+    elseif menu[i].type=="act" then
+      newItem=WINDOW_MANAGER:CreateControlFromVirtual("item"..i,menuParent,"HomesteadEngMenuButtonAction");
+      newItem:SetHandler("OnClicked",function () OnItemPress(self,i);end);
+      newItem:SetAnchor(TOPLEFT,anchor,anchorPoint,0,anchorOfs+3);
+      anchorOfs=3;
     else
       newItem=WINDOW_MANAGER:CreateControlFromVirtual("item"..i,menuParent,"HomesteadEngMenuHead");
+      newItem:SetAnchor(TOPLEFT,anchor,anchorPoint,0,anchorOfs);
+      anchorOfs=0;
     end
     newItem:SetText(menu[i].text);
-    newItem:SetAnchor(TOPLEFT,anchor,anchorPoint,0,0);
     anchor=newItem;
     anchorPoint=BOTTOMLEFT;
     self.menu[i]=newItem;
