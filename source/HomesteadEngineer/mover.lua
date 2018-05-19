@@ -54,6 +54,9 @@ end
 
 local function CheckHistory(myCache,frameIdx,a,b,c,CompareFunc)
   local curLoc;
+  if Mover.locked then
+    return false;
+  end
   if myCache.history then
     --Process the history to determine our progress and ultimately determine if we should use the cached value
     for i=1,#myCache.history-1 do
@@ -88,7 +91,7 @@ function Mover.GetItemPos(furnId)
       x=myCache.use.x;
       y=myCache.use.y;
       z=myCache.use.z;
-    else
+    elseif not Mover.locked then
       --d("no match "..string.format("%.3f",myCache.last[1])..","..tostring(myCache.last[2])..","..tostring(myCache.last[3])..","..tostring(myCache.last[4]).." "..string.format("%.3f",frameIdx)..","..tostring(x)..","..tostring(y)..","..tostring(z));
       Mover.itemCache[furnKey]=nil;
     end
