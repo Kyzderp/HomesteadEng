@@ -28,12 +28,14 @@ local function HomesteadEngSelItem_SetItem(self,furnID)
   local themeName=GetString("SI_FURNITURETHEMETYPE",themeID);
   local furnx1,furny1,furnz1,furnx2,furny2,furnz2=HousingEditorGetFurnitureLocalBounds(furnID);
   local size=string.format("Size: %0.1f %0.1f %0.1f",100*(furnx2-furnx1),100*(furny2-furny1),100*(furnz2-furnz1));
+  local origin=string.format("Origin: %0.1f %0.1f %0.1f",100*-furnx1,100*-furny1,100*-furnz1);
   self.furnID=furnID;
   self:GetNamedChild("Link"):SetText(name);
   self:GetNamedChild("Cat"):SetText(catName);
   self:GetNamedChild("Subcat"):SetText(subCatName);
   self:GetNamedChild("Theme"):SetText(themeName);
   self:GetNamedChild("Size"):SetText(size);
+  self:GetNamedChild("Origin"):SetText(origin);
   self:GetNamedChild("Tex"):SetHidden(false);
   self:GetNamedChild("Tex"):SetTexture(icon);
 end

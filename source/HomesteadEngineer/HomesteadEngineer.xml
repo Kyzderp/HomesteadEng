@@ -94,6 +94,9 @@
         <Label name="$(parent)Size" font="ZoFontGameSmall" color="CFDCBD">
           <Anchor point="TOPLEFT" relativeTo="$(parent)Theme" relativePoint="BOTTOMLEFT"/>
         </Label>
+        <Label name="$(parent)Origin" font="ZoFontGameSmall" color="CFDCBD">
+          <Anchor point="TOPLEFT" relativeTo="$(parent)Size" relativePoint="BOTTOMLEFT"/>
+        </Label>
         <Texture name="$(parent)Tex" level="0">
           <Anchor point="BOTTOMRIGHT"/>
           <Anchor point="TOPLEFT" relativePoint="BOTTOMRIGHT" offsetX="-100" offsetY="-100"/>
