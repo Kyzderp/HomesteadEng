@@ -3,6 +3,7 @@ local function HomesteadEngSelItem_SetItem(self,furnID)
     return;
   end
   if furnID==nil then
+    self.furnID=nil;
     self:GetNamedChild("Link"):SetText("No selection");
     self:GetNamedChild("Cat"):SetText("");
     self:GetNamedChild("Subcat"):SetText("");
