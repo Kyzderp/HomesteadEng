@@ -1,6 +1,6 @@
 ﻿## Title: Homestead Engineer
 ## Description: Place items in your home with precision
-## Version: 0.05.000
+## Version: 0.06.000
 ## APIVersion: 100023 100022
 ## Author: WetWired
 ## 
