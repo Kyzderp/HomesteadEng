@@ -41,8 +41,8 @@ function HE.SetLocalTransform(x,y,z,p,w,r)
   if not HE.locTrC or x~=HE.locTrC[1] or y~=HE.locTrC[2] or z~=HE.locTrC[3] or p~=HE.locTrC[4] or w~=HE.locTrC[5] or r~=HE.locTrC[6] then
     HE.locTrC={x,y,z,p,w,r};
     HE.locTr=TR.CoordToTransform(HE.L2C(HE.locTrC));
-    HE.Wnd.ItemAdj:LocalChanged();
     HomesteadEngMover.OnLocalChanged();
+    HE.Wnd.ItemAdj:LocalChanged();
   end
 end
 
