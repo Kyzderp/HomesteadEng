@@ -30,7 +30,10 @@ function HE.L2C(list)
 end
 
 function HE.SelectPrimary()
-  local targetFurn=HE.CheckTarget();
+  HE.SetPrimary(HE.CheckTarget());
+end
+
+function HE.SetPrimary(targetFurn)
   if targetFurn then
     HE.primaryTarget=targetFurn;
     HE.Wnd.ItemAdj:SetItem(targetFurn);
@@ -46,6 +49,27 @@ function HE.SetLocalTransform(x,y,z,p,w,r)
   end
 end
 
+function HE.AddRetrieveBind()
+  local panel=KEYBOARD_HOUSING_FURNITURE_BROWSER and KEYBOARD_HOUSING_FURNITURE_BROWSER.retrievalPanel;
+  if not panel then
+    return
+  end
+  local bind={
+    name="Target in HomesteadEngineer",
+    keybind="HOMESTEAD_ENG_UI_CONTEXT";
+    callback=function()
+      local sel=panel:GetMostRecentlySelectedData();
+      if sel then
+        HE.SetPrimary(sel.retrievableFurnitureId);
+      end
+    end,
+    enabled=function()
+      return panel:GetMostRecentlySelectedData()~=nil;
+    end,
+  };
+  table.insert(panel.keybindStripDescriptor,bind);
+end
+
 function HE.OnAddOnLoaded(event,addonName)
   if(addonName==HE.name) then
     ZO_CreateStringId("SI_BINDING_NAME_HOMESTEAD_ENG_SELECT_PRIMARY","Target furniture");
@@ -56,6 +80,8 @@ function HE.OnAddOnLoaded(event,addonName)
     HE.lock=false;
     
     HE.SetLocalTransform(0,0,0,0,0,0);
+    
+    HE.AddRetrieveBind();
     
     EVENT_MANAGER:UnregisterForEvent(HE.name,EVENT_ADD_ON_LOADED);
   end
