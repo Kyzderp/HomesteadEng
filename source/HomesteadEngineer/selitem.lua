@@ -9,6 +9,7 @@ local function HomesteadEngSelItem_SetItem(self,furnID)
     self:GetNamedChild("Subcat"):SetText("");
     self:GetNamedChild("Theme"):SetText("");
     self:GetNamedChild("Size"):SetText("");
+    self:GetNamedChild("Origin"):SetText("");
     self:GetNamedChild("Tex"):SetHidden(true);
     return;
   end
