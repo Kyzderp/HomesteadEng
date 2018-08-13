@@ -1,7 +1,7 @@
 ﻿## Title: Homestead Engineer
 ## Description: Place items in your home with precision
-## Version: 0.07.000
-## APIVersion: 100023
+## Version: 0.07.001
+## APIVersion: 100024
 ## Author: WetWired
 ## 
 ## This Add-On is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates. The Elder Scrolls® and related logos are registered trademarks or trademarks of ZeniMax Media Inc. in the United States and/or other countries. All rights reserved.
