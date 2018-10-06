@@ -99,24 +99,10 @@ function Mover.GetItemPos(furnId)
   return x,y,z,HousingEditorGetFurnitureOrientation(furnId);
 end
 
-local function FinishSetItemPos()
-  Mover.grouperPlacing=false;
-  FurnitureGrouper_Mover.Placed();
-end
-
 function Mover.SetItemPos(furnId,x,y,z,p,w,r)
-  local doPlace=false;
   --Don't do this if in placement mode
   if Mover.locked then
     return;
-  end
-  --Furniture Grouper integration -- pick up
-  if FurnitureGrouper_Mover and FurnitureGrouper_Mover.PickedUp and FurnitureGrouper_Mover.Placed then
-    doPlace=true;
-    if not Mover.grouperPlacing then
-      FurnitureGrouper_Mover.PickedUp(furnId);
-      Mover.grouperPlacing=0;
-    end
   end
   local furnKey=zo_getSafeId64Key(furnId);
   local frameIdx=GetFrameTimeSeconds();
@@ -138,12 +124,6 @@ function Mover.SetItemPos(furnId,x,y,z,p,w,r)
   myCache.last=reqpos;
   myCache.use={x=x,y=y,z=z};
   HousingEditorRequestChangePositionAndOrientation(furnId,reqpos[2],reqpos[3],reqpos[4],p,w,r);
-  --Furniture Grouper integration -- place 
-  if doPlace then
-    local idx=Mover.grouperPlacing+1;
-    Mover.grouperPlacing=idx;
-    zo_callLater(function () if Mover.grouperPlacing==idx then FinishSetItemPos(); end end,250);
-  end
 end
 
 function Mover.GetItemPosLoc(furnId)
