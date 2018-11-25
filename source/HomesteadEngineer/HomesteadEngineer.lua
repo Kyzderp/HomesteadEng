@@ -15,9 +15,14 @@ function HE.CheckTarget()
       or not HousingEditorCanSelectTargettedFurniture() then
     return nil;
   end
+  LockCameraRotation(true);
   HousingEditorSelectTargettedFurniture();
   local furnId=HousingEditorGetSelectedFurnitureId();
-  HousingEditorRequestSelectedPlacement();
+  -- Do this EHT's way to avoid interop issues
+  HousingEditorRequestModeChange(HOUSING_EDITOR_MODE_DISABLED);
+  HousingEditorRequestModeChange(HOUSING_EDITOR_MODE_SELECTION);
+  --HousingEditorRequestSelectedPlacement();
+  LockCameraRotation(false);
   return furnId;
 end
 
